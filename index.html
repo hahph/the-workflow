@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Hahp Portfolio] Education Workflow </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --ink-soft: #3a3a3a;
+    --ink-muted: #888;
+    --paper: #f5f2ec;
+    --paper-warm: #ede9e0;
+    --paper-gray: #d5d1cb;
+    --accent: #c8401a;
+    --accent-pale: #f0d5cc;
+    --rule: #d4cfc6;
+    --teal: #7d5f00;
+    --gold: #bb9600;
+    --blue: #1a4a8a;
+    --purple: #94215f;
+    --nav-h: 54px;
+  }
+
+  /* ─────────────────────────────────────────────
+     SCROLL — snap is enabled only on true desktop.
+     Mobile and short viewports scroll freely.
+  ───────────────────────────────────────────── */
+  html { overflow-y: scroll; scroll-behavior: smooth; }
+
+  /* scroll-snap-type: desktop uses this, mobile sets none via media query */
+  html { scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px; line-height: 1.6; overflow-x: hidden;
+  }
+
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.6;
+  }
+
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: var(--accent); width: 0%; z-index: 1001;
+    transition: width 0.1s linear;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 3.5rem; height: var(--nav-h);
+    background: rgba(245,242,236,0.93); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule); z-index: 100;
+  }
+  .nav-left { display: flex; align-items: center; }
+  .nav-back {
+    font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none; color: var(--ink-muted);
+    display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s;
+    border-right: 1px solid var(--rule); padding-right: 1.8rem; margin-right: 1.8rem;
+    height: var(--nav-h);
+  }
+  .nav-back:hover { color: var(--accent); font-size: 0.85rem; font-weight: 500; }
+  .nav-back:hover .nav-back-arrow { transform: translateX(-3px); }
+  .nav-back-arrow { font-size: 1.05rem; display: inline-block; transition: transform 0.2s; }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+    text-decoration: none; cursor: pointer; transition: color 0.2s;
+  }
+  .nav-logo:hover, .nav-logo.active { color: var(--accent); font-size: 1.2rem; font-weight: 600; }
+  .nav-links { display: flex; list-style: none; }
+  .nav-links li { position: relative; }
+  .nav-links li + li::before {
+    content: ''; position: absolute; left: 0; top: 50%;
+    transform: translateY(-50%); height: 12px; width: 1px; background: var(--rule);
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.05em;
+    text-transform: uppercase; text-decoration: none; color: var(--ink-muted);
+    transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem;
+    padding: 0 1.1rem; height: var(--nav-h);
+  }
+  .nav-step { font-size: 0.75rem; opacity: 0.55; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); font-size: 0.85rem; letter-spacing: 0.05em; font-weight: 500; }
+  .nav-links a.active .nav-step { opacity: 1; }
+
+  /* ─────────────────────────────────────────────
+     SNAP BASE — desktop first.
+     height:100vh + overflow:hidden is the default; Mobile (@media max-width:860px) overrides to height:auto so sections scroll naturally.
+  ───────────────────────────────────────────── */
+  .snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: var(--nav-h);
+    display: flex;
+    flex-direction: column;
+  }
+
+  html.snap-active .snap-section { height: 100vh; overflow: hidden; }
+
+  .sec-inner {
+    width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 3.5rem;
+    flex: 1; display: flex; flex-direction: column; min-height: 0;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.2rem 0 1rem; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  }
+  .section-number {
+    font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted);
+    padding: 0.3rem 0.55rem; border: 1px solid var(--rule); line-height: 1; flex-shrink: 0;
+  }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.95rem; font-weight: 300; color: var(--ink); line-height: 1.1; }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero-section {
+    scroll-snap-align: start; scroll-snap-stop: always;
+    height: 100vh; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr; padding-top: var(--nav-h);
+  }
+  html.snap-active .hero-section { height: 100vh; overflow: hidden; }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 3rem 2.8rem 3rem 3.5rem; border-right: 1px solid var(--rule);
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(38px,4.4vw,64px);
+    font-weight: 300; line-height: 1.07; letter-spacing: -0.02em; margin-bottom: 2rem;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); font-weight: 300; }
+  .hero-subtitle { font-size: 0.855rem; color: var(--ink-soft); line-height: 1.75; max-width: 44ch; }
+  .hero-right {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 3rem 3.5rem 3rem 2.8rem; gap: 1.8rem; background: var(--paper-warm);
+  }
+  .hero-stat { display: flex;  justify-content: center; margin-bottom: 1rem; margin-top: 4rem;}
+  .hero-stat img {  width: 100%;  height: auto;}
+  .tags-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.7rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .tags-eyebrow::before { content: ''; width: 1.5rem; height: 1px; background: var(--ink-muted); flex-shrink: 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;}
+  .tag { font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.32rem 0.75rem; white-space: nowrap; }
+  .tag-dark   { background: var(--ink); color: var(--paper); }
+  .tag-accent { background: var(--accent); color: #fff; }
+  .tag-teal   { background: var(--teal); color: #fff; }
+  .tag-blue   { background: var(--blue); color: #fff; }
+
+  /* ── CHALLENGES ── */
+  .challenges-section { background: var(--ink); }
+  .challenges-section .section-title { color: #f0ece4; }
+  .challenges-section .section-number { color: #555; border-color: #2e2e2e; }
+  .challenges-section .section-header { border-color: #222; }
+  .challenges-lead { font-size: 0.81rem; color: var(--ink-muted); line-height: 1.7; padding: 2rem 0; flex-shrink: 0; }
+  .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1e1e1e; }
+  .challenge-card { background: #111; padding: 1.5rem 1.7rem; display: flex; flex-direction: column; transition: background 0.3s; }
+  .challenge-card:hover { background: #161616; }
+  .challenge-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.55rem;
+  }
+  .challenge-tag::before { content: ''; width: 1rem; height: 1px; background: var(--accent); }
+  .challenge-title { font-family: 'Cormorant Garamond', serif; font-size: 1.18rem; font-weight: 400; color: #f0ece4; margin-bottom: 0.55rem; line-height: 1.25; }
+  .challenge-body { font-size: 0.78rem; color: #777; line-height: 1.6; flex: 1; }
+  .challenge-risk { margin-top: 0.8rem; padding: 0.5rem 0.85rem; background: rgba(200,64,26,0.1); border-left: 2px solid var(--accent); }
+  .challenge-risk p { font-size: 0.73rem; color: #c09080; font-style: italic; }
+
+  /* ── MY ROLE ── */
+  .role-section { background: var(--paper-warm); }
+  .role-intro-block { display: flex; align-items: center; gap: 2.5rem; padding: 2rem 0; border-bottom: 1px solid var(--rule); flex-shrink: 0; }
+  .role-intro-text { flex: 1 1 100%; }
+  .role-intro-text p { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; }
+  /* flex:1 so the grid fills the remaining height between intro and the section edge */
+  .resp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); grid-auto-rows: minmax(225px,auto); min-height: 0; }
+  .responsibility { background: var(--paper); padding: 1.3rem 1.5rem; display: flex; flex-direction: column; transition: background 0.2s; }
+  .responsibility:hover { background: #fff; }
+  .resp-meta {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--ink-muted);
+    letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.65rem;
+    padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .resp-num { color: var(--accent); }
+  .resp-content h4 { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 0.35rem; line-height: 1.3; }
+  .resp-content p { font-size: 0.77rem; color: var(--ink-soft); line-height: 1.55; }
+
+  /* ─────────────────────────────────────────────
+     SOLUTION / ARCHITECTURE
+     arch-meta is now a right-side panel with 3 equal pillar rows and flow arrows.
+  ───────────────────────────────────────────── */
+  .solution-section { background: var(--paper); }
+  .system-lead { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.72; padding: 0.9rem 0; flex-shrink: 0; }
+
+  .arch-diagram-wrap {
+    border: 1px solid var(--rule); background: #fff; overflow: hidden;
+    flex: 1; min-height: 0; max-height: 530px;
+    display: flex; flex-direction: row; /* image left | pillar panel right */
+  }
+
+  /* Image panel */
+  .arch-img-panel {
+    flex: 1; min-width: 0;
+    padding: 1.2rem;
+    background: var(--paper-gray);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .arch-diagram-img {
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto;
+    object-fit: contain; display: block;
+    background: #fff; border: 1px solid var(--rule); border-radius: 10px;
+  }
+  .arch-diagram-fallback {
+    display: none; flex-direction: column; align-items: center;
+    justify-content: center; gap: 0.8rem; flex: 1; background: var(--paper-warm); padding: 2rem;
+  }
+  .arch-fallback-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
+
+  /* Pillar panel — right side */
+  .arch-meta {
+    width: 265px; flex-shrink: 0;
+    border-left: 1px solid var(--rule);
+    background: var(--paper-warm);
+    display: flex; flex-direction: column;
+  }
+
+  /* Each pillar takes equal height */
+  .arch-pillar {
+    flex: 1;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    display: flex; flex-direction: column; justify-content: center; gap: 0.9rem;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .arch-pillar:last-child { border-bottom: none; }
+
+  /* Coloured left accent bar */
+  .arch-pillar::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .arch-pillar:nth-child(odd)::before  { background: var(--teal); }
+  .arch-pillar:last-child::before      { background: var(--accent); }
+
+  .arch-pillar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; color: var(--ink); line-height: 1.2;
+  }
+  .arch-pillar-body { font-size: 0.75rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* ── THE WORKFLOW ── */
+  .system-section { background: var(--paper-warm); }
+  .sys-slider {
+    border: 1px solid var(--rule); overflow: hidden;
+    flex: 0 1 530px; min-height: 0; display: flex; flex-direction: column;
+  }
+  .sys-track-wrap { overflow: hidden; flex: 1; min-height: 0; }
+  .sys-track {
+    display: flex; height: 100%;
+    transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+  .sys-slide { min-width: 100%; height: 100%; display: flex; flex-direction: row; }
+  .sys-slide-meta {
+    width: 265px; flex-shrink: 0; padding: 2rem;
+    background: var(--paper-warm); border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column; justify-content: center; gap: 0.9rem;
+  }
+  .sys-slide-label {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted);
+  }
+  .sys-slide-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600;
+    color: var(--ink); line-height: 1.2;
+  }
+  .sys-slide-title::after { content: ''; display: block; width: 2rem; height: 2px; background: var(--accent); margin-top: 0.65rem; }
+  .sys-slide-desc { font-size: 0.76rem; color: var(--ink-soft); line-height: 1.65; }
+  .sys-slide-visual {
+    flex: 1; min-width: 0; padding: 1.2rem;
+    background: var(--paper-gray);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .sys-slide-visual img {
+    max-width: 100%; max-height: 100%; width: auto; height: auto;
+    object-fit: contain; display: block;
+    background: #fff; border: 1px solid var(--rule); border-radius: 10px;
+  }
+  /* Controls: space-between instead of fixed gap */
+  .sys-controls {
+    display: flex; align-items: center; justify-content: flex-start; gap: 460px;
+    padding: 0.35rem 6rem; background: var(--ink); flex-shrink: 0;
+  }
+  .sys-dots { display: flex; gap: 5px; align-items: center; }
+  .sys-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.18); border: none; cursor: pointer; padding: 0; transition: all 0.25s; }
+  .sys-dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+  .sys-nav { display: flex; gap: 5px; align-items: center; }
+  .sys-counter { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-right: 0.6rem; }
+  .sys-btn { width: 26px; height: 26px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12); color: var(--paper); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 15px; }
+  .sys-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .sys-btn:disabled { opacity: 0.2; cursor: default; }
+
+  /* ─────────────────────────────────────────────
+     IMPACT
+     Problem 2 fix:
+     - results-grid gets flex:1 → naturally fills the
+       space between results-lead and the cta-box.
+     - cta-box has no margin-top; it's pushed down by
+       the growing grid above it.
+     - footer is a direct flex child of the section
+       (outside sec-inner) → always anchors to bottom.
+  ───────────────────────────────────────────── */
+  .results-section { background: var(--paper); }
+  .results-lead { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.75; padding: 0.9rem 0; max-width: 97ch; flex-shrink: 0; }
+  .results-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule);
+    flex-shrink: 0; /* natural height — no flex-grow, no dead zone */
+  }
+  .result-card { background: var(--paper); padding: 1.2rem 1.6rem; position: relative; overflow: hidden; transition: background 0.3s; display: flex; flex-direction: column; }
+  .result-card:hover { background: var(--paper-warm); }
+  .result-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .result-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--blue); transition: width 0.4s ease; }
+  .result-card:hover::after { width: 100%; }
+  .result-cat { font-family: 'DM Mono', monospace; font-size: 0.53rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .result-card.op .result-cat { color: var(--purple); }
+  .result-card.wo .result-cat { color: var(--blue); }
+  .result-card.ac .result-cat { color: var(--gold); }
+  .result-card.fi .result-cat { color: var(--accent); }
+  .result-title { font-family: 'Cormorant Garamond', serif; font-size: 1.18rem; font-weight: 300; color: var(--ink); line-height: 1.25; margin-bottom: 0.65rem; }
+  .result-body { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; flex: 1; }
+
+  /* No margin-top — grid flex:1 above handles spacing */
+  .cta-box {
+    border: 1px solid var(--rule); border-top: none; background: var(--paper-warm);
+    padding: 1.4rem 3rem; display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-shrink: 0;
+  }
+  .cta-headline { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; line-height: 0.9; color: var(--ink); margin-bottom: 0.3rem; }
+  .cta-headline em { font-style: italic; color: var(--accent); }
+  .cta-sub { font-size: 0.8rem; color: var(--ink-soft); }
+  .cta-btn { display: inline-flex; align-items: center; gap: 0.55rem; background: var(--accent); color: #fff; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 0.65rem 1.4rem; border: 1px solid var(--accent); transition: background 0.25s, border-color 0.25s; white-space: nowrap; flex-shrink: 0; }
+  .cta-btn:hover { background: var(--ink); border-color: var(--ink); }
+
+  /* Footer — outside sec-inner, always at section bottom */
+  footer {
+    background: var(--ink); padding: 0.8rem 1.5rem;
+    display: flex; justify-content: center; align-items: center;
+    border-top: 1px solid #1e1e1e; flex-shrink: 0;
+  }
+  .footer-text { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #6b6b6b; letter-spacing: 0.09em; }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal { opacity: 1; transform: none; }
+  body.anim-ready .reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  body.anim-ready .reveal.visible { opacity: 1; transform: none; }
+  .d1 { transition-delay: 0.07s; }
+  .d2 { transition-delay: 0.14s; }
+  .d3 { transition-delay: 0.21s; }
+
+  /* ─────────────────────────────────────────────
+     RESPONSIVE
+  ───────────────────────────────────────────── */
+
+  /* Tablet / medium screens */
+  @media (max-width: 1024px) {
+    nav, .sec-inner { padding-left: 2rem; padding-right: 2rem; }
+    .hero-left { padding: 2.5rem 2rem 2.5rem 2rem; }
+    .hero-right { padding: 2.5rem 2rem; }
+    .sys-slide-meta { width: 220px; }
+    .arch-meta { width: 240px; }
+  }
+
+  /* Short viewport: landscape phone, browser zoom >100% */
+  @media (max-height: 640px) {
+    .snap-section, .hero-section { height: auto; overflow: visible; }
+    .section-header { padding: 0.7rem 0 0.5rem; }
+    .challenges-lead, .system-lead, .results-lead { padding: 0.6rem 0; }
+    .role-intro-block { padding: 0.8rem 0; }
+    .sys-slider { flex: 0 0 350px; }
+    .hero-tag { margin-bottom: 1.5rem; }
+  }
+
+  /* ─────────────────────────────────────────────
+     MOBILE — ≤860px
+     Disable snap entirely. All sections become
+     natural-height blocks in a continuous scroll.
+  ───────────────────────────────────────────── */
+  @media (max-width: 860px) {
+
+    /* Kill snap — !important overrides the base html rule */
+    html { scroll-snap-type: none !important; }
+
+    /* ── Nav ── */
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    .nav-back { padding-right: 1rem; margin-right: 1rem; font-size: 0.6rem; }
+
+    /* ── All sections: natural height, free scroll ── */
+    .snap-section,
+    .hero-section {
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      scroll-snap-align: none !important;
+      scroll-snap-stop: unset !important;
+    }
+
+    /* Bottom padding creates visual breathing room between sections */
+    .snap-section { padding-bottom: 2.5rem; }
+    .results-section { padding-bottom: 0; }
+
+    /* sec-inner: remove flex:1 stretch against parent */
+    .sec-inner { padding: 0 1.5rem; flex: none; }
+
+    /* Section header */
+    .section-header { padding: 1rem 0 0.75rem; }
+    .section-title { font-size: 1.6rem; }
+
+    /* ── Hero ── */
+    .hero-section { grid-template-columns: 1fr; }
+    .hero-left {
+      padding: 2rem 1.5rem 1.5rem;
+      border-right: none; border-bottom: 1px solid var(--rule);
+      justify-content: flex-start;
+    }
+    .hero-tag { margin-bottom: 1.5rem; }
+    .hero-right { padding: 1.5rem; gap: 1.2rem; }
+
+    /* ── Challenges ── */
+    .challenges-lead { padding: 1rem 0; }
+    .challenge-grid { grid-template-columns: 1fr; }
+
+    /* ── Role ── */
+    .role-intro-block { padding: 1rem 0; }
+    .resp-grid { grid-template-columns: 1fr; grid-auto-rows: auto; flex: none; }
+    .responsibility { min-height: 0; }
+
+    /* ── Solution arch ── */
+    .arch-diagram-wrap { flex-direction: column; max-height: none; flex: none; }
+    .arch-img-panel { min-height: 220px; max-height: 260px; }
+    .arch-meta {
+      width: 100%; border-left: none; border-top: 1px solid var(--rule);
+      flex-direction: column;
+    }
+    .arch-pillar {
+      flex: none; padding: 1rem 1.5rem; gap: 0.5rem;
+      border-bottom: 1px solid var(--rule); border-right: none;
+    }
+    .arch-pillar:last-child { border-bottom: none; }
+
+    /* ── System slider ── */
+    .sys-slider { flex: none; }
+    .sys-track-wrap { flex: none; }
+    .sys-track { height: auto; }
+    .sys-slide { flex-direction: column; height: auto; border-bottom: 1px solid var(--rule); }
+    .sys-slide:last-child { border-bottom: none; }
+    .sys-slide-meta { width: 100%; border-right: none; border-bottom: 1px solid var(--rule); padding: 1.2rem 1.5rem; gap: 0.6rem; }
+    .sys-slide-visual { min-height: 200px; padding: 1rem; }
+    .sys-controls { gap: 0; justify-content: space-between; padding: 0.5rem 1.2rem; }
+    .system-lead { padding: 0.8rem 0; }
+
+    /* ── Results ── */
+    .results-grid { grid-template-columns: 1fr; }
+    .cta-box { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+  }
+
+  /* Extra small — phones ≤480px */
+  @media (max-width: 480px) {
+    nav { padding: 0 1rem; }
+    .sec-inner { padding: 0 1rem; }
+    .hero-left { padding: 1.8rem 1rem 1.2rem; }
+    .hero-right { padding: 1.2rem 1rem; }
+    .hero-title { font-size: clamp(30px, 8vw, 42px); }
+    .section-title { font-size: 1.4rem; }
+    .challenge-card { padding: 1.1rem 1.2rem; }
+    .result-card { padding: 1.1rem 1.2rem; }
+    .cta-box { padding: 1.2rem 1rem; }
+    .arch-img-panel { max-height: 200px; }
+    .arch-pillar { padding: 0.9rem 1rem; }
+    .sys-slide-meta { padding: 1rem; }
+    .sys-slide-visual { min-height: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="#" class="nav-back"><span class="nav-back-arrow">&#8678;</span> Portfolio</a>
+    <a href="#hero" class="nav-logo" id="navLogo">Case Study — Education Workflow</a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#challenges"><span class="nav-step">01/</span> Business Challenges</a></li>
+    <li><a href="#role"><span class="nav-step">02/</span> My Role</a></li>
+    <li><a href="#solution"><span class="nav-step">03/</span> Solution</a></li>
+    <li><a href="#system"><span class="nav-step">04/</span> The Workflow</a></li>
+    <li><a href="#results"><span class="nav-step">05/</span> Impact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section" id="hero">
+  <div class="hero-left reveal">
+    <p class="hero-tag">The Project · Overview</p>
+    <h1 class="hero-title">Building a <em>Centralized</em><br>Workflow System</h1>
+    <p class="hero-subtitle">Designed and deployed an end-to-end materials workflow system — transforming scattered manual operations into a centralized, auditable process that established financial accountability and enabled data-driven planning.</p>
+  </div>
+  
+  <div class="hero-right">
+    <div class="hero-stat">
+        <img src="https://i.ibb.co/vxBJF64L/hero-stat.png" alt="Education Operations Workflow">
+    </div>
+    
+    <div class="reveal">
+      <p class="tags-eyebrow">Capabilities demonstrated</p>
+      <div class="tag-row">
+        <span class="tag tag-accent">Business Acumen</span>
+        <span class="tag tag-teal">Workflow Design</span>
+        <span class="tag tag-blue">Financial Controls</span>
+        <span class="tag tag-dark">Process Governance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGES -->
+<section class="snap-section challenges-section" id="challenges">
+  <div class="sec-inner">
+    <div class="section-header reveal">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Business <em>Challenges</em></h2>
+    </div>
+    <p class="challenges-lead reveal">As the organization scaled across branches, operations remained dependent on fragmented, manual workflows. <br>Without system-level visibility, failures accumulated silently — undetected, unassigned, and unresolved until they surfaced as larger problems.</p>
+    <div class="challenge-grid reveal">
+        
+      <div class="challenge-card">
+        <p class="challenge-tag">Content Governance Risk</p>
+        <h3 class="challenge-title">Materials With No Oversight</h3>
+        <p class="challenge-body">Teaching materials were submitted through untracked channels — email threads, <br>chat messages, verbal handoffs — leaving no structured record of what was submitted <br> or whether it met curriculum requirements.</p>
+        <div class="challenge-risk"><p>Impact: Curriculum alignment could not be verified — delivery commitments to students had no audit trail to detect or correct misalignment</p></div>
+      </div>
+      
+      <div class="challenge-card">
+        <p class="challenge-tag">Service Delivery Risk</p>
+        <h3 class="challenge-title">Fragmented Request Management</h3>
+        <p class="challenge-body">Printing requests reached teaching assistants through inconsistent channels, with no defined intake process, no confirmation of receipt, and no escalation path for overdue items. Ownership was assumed rather than assigned.</p>
+        <div class="challenge-risk"><p>Impact: Classroom readiness could not be guaranteed — directly undermining service quality and student satisfaction</p></div>
+      </div>
+      
+      <div class="challenge-card">
+        <p class="challenge-tag">Financial Integrity Risk</p>
+        <h3 class="challenge-title">Invoices Without Verification</h3>
+        <p class="challenge-body">Month-end invoices arrived without sufficient supporting documentation — leaving Finance with no basis to reconcile amounts against actual operational requests before payment was processed.</p>
+        <div class="challenge-risk"><p>Impact: Without a verifiable request record, billing discrepancies had no detection mechanism — creating cost overruns and financial leakage</p></div>
+      </div>
+      
+      <div class="challenge-card">
+        <p class="challenge-tag">Planning Capability Risk</p>
+        <h3 class="challenge-title">Data-Blind Budget Planning</h3>
+        <p class="challenge-body">Class sizes and material demand fluctuated throughout the year, yet no system existed to capture demand patterns across branches. Budget decisions were made without reliable data, resulting in planning driven by intuition rather than evidence.</p>
+        <div class="challenge-risk"><p>Impact: Cost forecasting and vendor negotiations remained reactive — limiting cost efficiency and long-term planning capability</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MY ROLE -->
+<section class="snap-section role-section" id="role">
+  <div class="sec-inner">
+    <div class="section-header reveal">
+      <span class="section-number">02</span>
+      <h2 class="section-title">My Role &amp;<em> Ownership</em></h2>
+    </div>
+    <div class="role-intro-block reveal">
+      <div class="role-intro-text">
+        <p>Sole Owner — End-to-End Process Design & Implementation<br>
+            Independently deployed a custom solution to eliminate operational bottlenecks across multiple branches without requiring dedicated engineering resources.</p>
+      </div>
+    </div>
+    <div class="resp-grid">
+      <div class="responsibility reveal">
+        <div class="resp-meta"><span class="resp-num">01</span> / Diagnosis</div>
+        <div class="resp-content"><h4>Problem Mapping</h4><p>Conducted discovery across operational functions — interviewing stakeholders, gathering unstructured data, and mapping actual failure points to translate operational pain into solvable system requirements.</p></div>
+      </div>
+      <div class="responsibility reveal d1">
+        <div class="resp-meta"><span class="resp-num">02</span> / Design</div>
+        <div class="resp-content"><h4>Solution Architecture</h4><p>Identified Google Workspace as the right platform — then designed the end-to-end workflow architecture with parallel processing to ensure reliability and long-term scalability at zero additional cost.</p></div>
+      </div>
+      <div class="responsibility reveal d2">
+        <div class="resp-meta"><span class="resp-num">03</span> / Build</div>
+        <div class="resp-content"><h4>System Development</h4><p>Built and integrated core system components from the ground up — intake forms with validation logic, automated notification flows, request tracking infrastructure, and the analytics layer for cost reporting.</p></div>
+      </div>
+      <div class="responsibility reveal">
+        <div class="resp-meta"><span class="resp-num">04</span> / Deploy</div>
+        <div class="resp-content"><h4>Phased Rollout</h4><p>Ran a controlled pilot to validate workflow logic — then expanded organization-wide while maintaining business continuity throughout the transition.</p></div>
+      </div>
+      <div class="responsibility reveal d1">
+        <div class="resp-meta"><span class="resp-num">05</span> / Enable</div>
+        <div class="resp-content"><h4>Training &amp; Documentation</h4><p>Authored user documentation and embedded tutorial videos directly in the system interface — enabling staff to onboard independently without live training sessions.</p></div>
+      </div>
+      <div class="responsibility reveal d2">
+        <div class="resp-meta"><span class="resp-num">06</span> / Sustain</div>
+        <div class="resp-content"><h4>Maintenance &amp; Iteration</h4><p>Actively monitored system performance post-launch, gathered user feedback, maintained the stability and resolved operational issues as the system matured.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="snap-section solution-section" id="solution">
+  <div class="sec-inner">
+    <div class="section-header reveal">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Solution <em>Approach</em></h2>
+    </div>
+    <p class="system-lead reveal">No new tools. No additional budget. No steep learning curve.<br>
+    The solution was designed around constraints — and Google Workspace, already embedded in daily operations, was the right foundation to build on.</p>
+
+    <div class="arch-diagram-wrap reveal">
+
+      <!-- Left: architecture diagram -->
+      <div class="arch-img-panel">
+        <img src="https://iili.io/qVUhSQj.png" alt="Workflow architecture" class="arch-diagram-img"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="arch-diagram-fallback">
+          <span class="arch-fallback-label">Workflow architecture</span>
+        </div>
+      </div>
+
+      <!-- Right: three pillar descriptions with flow arrows -->
+      <div class="arch-meta">
+
+        <div class="arch-pillar">
+          <div class="arch-pillar-title"><em>Technology Stack</em></div>
+          <p class="arch-pillar-body">
+              • Forms — User interface with validation<br>
+              • Sheets — Data storage and analytics<br>
+              • Gmail — Notification automation<br>
+              • Drive — Centralized file repository<br>
+          </p>
+        </div>
+        
+        <div class="arch-pillar">
+          <div class="arch-pillar-title"><em>Why this Stack?</em></div>
+          <p class="arch-pillar-body">
+              • Zero additional cost — CapEx & Opex<br>
+              • Familiar UI/UX — No adoption barrier<br>
+              • Capable for the required business logic — no external servers needed
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE WORKFLOW-->
+<section class="snap-section system-section" id="system">
+  <div class="sec-inner">
+    <div class="section-header reveal">
+      <span class="section-number">04</span>
+      <h2 class="section-title">The <em>Workflow</em></h2>
+    </div>
+    <p class="system-lead reveal">
+    Built on existing infrastructure, the workflow connects every stage of the materials process into a single traceable system, <br> from the moment a request is submitted to the point Finance reconciles the invoice.
+    </p>
+
+    <div class="sys-slider reveal">
+      <div class="sys-track-wrap">
+        <div class="sys-track" id="sysTrack">
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">01 / Entry Layer</span>
+              <div class="sys-slide-title">User Enablement</div>
+              <p class="sys-slide-desc">A self-service tutorial embedded directly in the form interface — giving teachers the context needed to submit requests correctly from the first attempt, without requiring live training or ongoing support from the system owner.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qVsC3yN.png" alt="Data Model" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">02 / Input Layer</span>
+              <div class="sys-slide-title">Request Form</div>
+              <p class="sys-slide-desc">A structured Google Form with built-in validation enforces data quality at the point of entry — ensuring every request is complete and correctly formatted before it reaches the processing layer.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qVLLtls.png" alt="Input Sheets UI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">03 / Processing Layer</span>
+              <div class="sys-slide-title">Automation Engine</div>
+              <p class="sys-slide-desc">Form submission triggers a parallel automation sequence — logging the request to the Master Sheet, notifying the responsible teaching assistant, and confirming receipt to the requester. No manual coordination required at any step.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qViYkEN.png" alt="Formula Logic" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">04 / Data Layer</span>
+              <div class="sys-slide-title">Master Sheet</div>
+              <p class="sys-slide-desc">The Master Sheet serves as the single source of truth — logging every request with timestamp, requester, assigned TA, status, and materials list. Request history is queryable, auditable, and accessible to both operations and finance.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qVsuaef.png" alt="Apps Script Automation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">05 / Archive Layer</span>
+              <div class="sys-slide-title">Content Repository</div>
+              <p class="sys-slide-desc">Teaching materials are automatically archived to Drive upon submission — establishing the content audit trail the organization had never had. Folder-level permissions maintain accessibility for relevant staff while preserving control over sensitive files.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qVsc1yX.png" alt="Payslip Staff View" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+          <div class="sys-slide">
+            <div class="sys-slide-meta">
+              <span class="sys-slide-label">06 / Analytic Layer</span>
+              <div class="sys-slide-title">Reporting View</div>
+              <p class="sys-slide-desc">Aggregates request data into a structured reporting view — providing Finance with a reconciliation baseline against vendor invoices and the demand visibility needed for evidence-based budget planning.</p>
+            </div>
+            <div class="sys-slide-visual">
+              <img src="https://iili.io/qVs5Y5g.png" alt="Payroll Summary" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="sys-controls">
+        <div class="sys-dots" id="sysDots"></div>
+        <div class="sys-nav">
+          <span class="sys-counter" id="sysCounter">1 / 6</span>
+          <button class="sys-btn" id="sysPrev" aria-label="Previous">&#8592;</button>
+          <button class="sys-btn" id="sysNext" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="snap-section results-section" id="results">
+  <div class="sec-inner">
+    <div class="section-header reveal">
+      <span class="section-number">05</span>
+      <h2 class="section-title">Business Value <em>Delivered</em></h2>
+    </div>
+    <p class="results-lead reveal">The system replaced four informal workarounds with auditable, process-level controls — each outcome mapped directly to a structural gap that had no resolution path before.</p>
+    <div class="results-grid">
+      <div class="result-card op reveal">
+        <p class="result-cat">✔ Content Accountability</p>
+        <h3 class="result-title">Commitments Tracked. Gaps Closed.</h3>
+        <p class="result-body">
+            <b>• Content Oversight</b> – Materials are logged and traceable, making curriculum alignment auditable on demand rather than assumed.<br>
+            <b>• Delivery Accountability</b> – Every submission is timestamped and assigned, creating a clear record of who committed to what — and when.
+        </p>
+      </div>
+      
+      <div class="result-card ac reveal d1">
+        <p class="result-cat">✔ Operational Reliability</p>
+        <h3 class="result-title">Reliability Built Into the Process</h3>
+        <p class="result-body">
+            <b>• Intake Control</b> – A centralized intake channel replaced fragmented request paths, eliminating missed or delayed fulfillment.<br>
+            <b>• Resource Optimization</b> – Standardized workflows reduced reactive coordination load, freeing TAs for higher-value student support.
+        </p>
+      </div>
+      
+      <div class="result-card wo reveal d2">
+        <p class="result-cat">✔ Financial Control</p>
+        <h3 class="result-title">From Blind Payment to Verified Spend</h3>
+        <p class="result-body">
+            <b>• Cost Visibility</b> – Request records provided a reconciliation baseline, enabling Finance to verify invoices before payment rather than after.<br>
+            <b>• Leakage Prevention</b> – Documented evidence closed the gap for unchecked billing — blind payments became structurally impossible.
+        </p>
+      </div>
+      
+      <div class="result-card fi reveal d3">
+        <p class="result-cat">✔ Planning Intelligence</p>
+        <h3 class="result-title">Data Where There Was None</h3>
+        <p class="result-body">
+            <b>• Consumption Tracking</b> –  Visible demand patterns provide a baseline for budget planning and vendor negotiations.<br>
+            <b>• Data Maturity</b> – The organization moved from zero operational data to a structured, analytics-ready foundation.
+        </p>
+      </div>
+      
+    </div>
+    <!-- CTA is vertically centered in the remaining space between grid and footer -->
+    <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center;">
+      <div class="cta-box reveal">
+        <div>
+          <h3 class="cta-headline">Let's Work <em>Together</em></h3>
+          <p class="cta-sub">I'd be glad to explore how I can support your team.</p>
+        </div>
+        <a class="cta-btn" href="https://mail.google.com/mail/u/0/?fs=1&to=hahp.working@gmail.com&su=%5BPortfolio%5D+Education+Workflow&body=Hi+Ha,%0A%0AI+came+across+your+portfolio+and+would+love+to+explore+how+we+might+work+together.%0AWhen+would+you+be+available+for+a+quick+chat?%0A%0ABest+regards,&tf=cm" target="_blank">Get in touch &#8594;</a>
+      </div><!-- /cta-box -->
+    </div><!-- /centering wrapper -->
+  </div><!-- /sec-inner -->
+  <!-- footer lives outside sec-inner so it always anchors to the bottom of the snap-section -->
+  <footer>
+    <p class="footer-text">Automation Workflow &nbsp;&middot;&nbsp; Project 2023 &nbsp;&middot;&nbsp; Education operations</p>
+  </footer>
+</section>
+
+<script>
+  /* ── REVEAL ── */
+  function revealAll() {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+  function initReveal() {
+    document.body.classList.add('anim-ready');
+    if (!('IntersectionObserver' in window)) { revealAll(); return; }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.04 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    setTimeout(() => {
+      const still = document.querySelectorAll('.reveal:not(.visible)');
+      if (still.length) revealAll();
+    }, 600);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(initReveal);
+  } else {
+    window.addEventListener('load', initReveal);
+  }
+  setTimeout(revealAll, 1000);
+
+  /* ── Progress bar ── */
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    document.getElementById('progress').style.width =
+      (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
+
+  /* ── Wheel snap ──
+     CSS (scroll-snap-type) handles snap on desktop; CSS media query (max-width:860px) disables snap on mobile; JS only handles the smooth section-jump on wheel event.    */
+  const SECTIONS = ['hero', 'challenges', 'role', 'solution', 'system', 'results'];
+  let snapping = false;
+
+  function getNearestSection() {
+    const mid = window.scrollY + window.innerHeight * 0.5;
+    let best = 0, bestDist = Infinity;
+    SECTIONS.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const c = el.getBoundingClientRect().top + window.scrollY + el.offsetHeight * 0.5;
+      const dist = Math.abs(c - mid);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (window.innerWidth <= 860) return; /* mobile: free scroll */
+    if (snapping) { e.preventDefault(); return; }
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const cur = getNearestSection();
+    const nxt = Math.max(0, Math.min(SECTIONS.length - 1, cur + dir));
+    if (nxt === cur) return;
+    e.preventDefault();
+    snapping = true;
+    document.getElementById(SECTIONS[nxt]).scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => { snapping = false; }, 950);
+  }, { passive: false });
+
+  /* ── Nav clicks ── */
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      snapping = true;
+      target.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => { snapping = false; }, 950);
+    });
+  });
+
+  /* ── Active nav highlight ── */
+  const navAs = document.querySelectorAll('.nav-links a, .nav-logo');
+  const secObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio >= 0.4) {
+        navAs.forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.55 });
+  SECTIONS.forEach(id => { const el = document.getElementById(id); if (el) secObs.observe(el); });
+
+  /* ── System Slider ── */
+  const track   = document.getElementById('sysTrack');
+  const dotsEl  = document.getElementById('sysDots');
+  const btnPrev = document.getElementById('sysPrev');
+  const btnNext = document.getElementById('sysNext');
+  const counter = document.getElementById('sysCounter');
+  const slides  = track ? [...track.querySelectorAll('.sys-slide')] : [];
+  const total   = slides.length;
+  let cur = 0;
+
+  if (total > 0) {
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'sys-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function updateSlider() {
+      track.style.transform = `translateX(-${cur * 100}%)`;
+      dotsEl.querySelectorAll('.sys-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+      counter.textContent = (cur + 1) + ' / ' + total;
+      btnPrev.disabled = cur === 0;
+      btnNext.disabled = cur === total - 1;
+    }
+
+    function goTo(n) { cur = Math.max(0, Math.min(n, total - 1)); updateSlider(); }
+
+    btnPrev.addEventListener('click', () => goTo(cur - 1));
+    btnNext.addEventListener('click', () => goTo(cur + 1));
+
+    document.addEventListener('keydown', e => {
+      const sys = document.getElementById('system');
+      if (!sys) return;
+      const r = sys.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(cur - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); }
+      }
+    });
+
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 44) goTo(dx < 0 ? cur + 1 : cur - 1);
+    });
+
+    updateSlider();
+  }
+</script>
+</body>
+</html>
