@@ -519,7 +519,7 @@
 <!-- NAV -->
 <nav>
   <div class="nav-left">
-    <a href="#" class="nav-back"><span class="nav-back-arrow">&#8678;</span> Portfolio</a>
+    <a href="#" class="nav-back" onclick="handleBackToPortfolio(event)">  <span class="nav-back-arrow">&#8678;</span> Portfolio</a>
     <a href="#hero" class="nav-logo" id="navLogo">Case Study — Education Workflow</a>
   </div>
   <ul class="nav-links">
@@ -984,5 +984,30 @@
     updateSlider();
   }
 </script>
+
+ </script>
+ <script>
+  function handleBackToPortfolio(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log("Back button clicked");
+
+    const isEmbedded = window.parent && window.parent !== window;
+
+    if (isEmbedded) {
+      console.log("Sending CLOSE_CASE_STUDY message to parent");
+      window.parent.postMessage({ type: "CLOSE_CASE_STUDY" }, "*");
+    } else {
+      console.log("Standalone mode");
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+  }
+</script>
+ 
 </body>
 </html>
