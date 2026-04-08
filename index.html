@@ -23,6 +23,7 @@
     --gold: #bb9600;
     --blue: #1a4a8a;
     --purple: #94215f;
+    --frk: #bc3c1a;
     --nav-h: 54px;
   }
 
@@ -176,6 +177,7 @@
   .challenges-section .section-number { color: #555; border-color: #2e2e2e; }
   .challenges-section .section-header { border-color: #222; }
   .challenges-lead { font-size: 0.81rem; color: var(--ink-muted); line-height: 1.7; padding: 2rem 0; flex-shrink: 0; }
+  .challenges-lead en { color: var(--frk); }
   .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1e1e1e; }
   .challenge-card { background: #111; padding: 1.5rem 1.7rem; display: flex; flex-direction: column; transition: background 0.3s; }
   .challenge-card:hover { background: #161616; }
@@ -195,6 +197,7 @@
   .role-intro-block { display: flex; align-items: center; gap: 2.5rem; padding: 2rem 0; border-bottom: 1px solid var(--rule); flex-shrink: 0; }
   .role-intro-text { flex: 1 1 100%; }
   .role-intro-text p { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; }
+  .role-intro-text en { color: var(--frk); }
   /* flex:1 so the grid fills the remaining height between intro and the section edge */
   .resp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); grid-auto-rows: minmax(225px,auto); min-height: 0; }
   .responsibility { background: var(--paper); padding: 1.3rem 1.5rem; display: flex; flex-direction: column; transition: background 0.2s; }
@@ -215,6 +218,7 @@
   ───────────────────────────────────────────── */
   .solution-section { background: var(--paper); }
   .system-lead { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.72; padding: 0.9rem 0; flex-shrink: 0; }
+  .system-lead en { color: var(--frk); }
 
   .arch-diagram-wrap {
     border: 1px solid var(--rule); background: #fff; overflow: hidden;
@@ -336,6 +340,7 @@
   ───────────────────────────────────────────── */
   .results-section { background: var(--paper); }
   .results-lead { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.75; padding: 0.9rem 0; max-width: 97ch; flex-shrink: 0; }
+  .results-lead en { color: var(--frk); }
   .results-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
     background: var(--rule); border: 1px solid var(--rule);
@@ -531,7 +536,7 @@
   <div class="hero-left reveal">
     <p class="hero-tag">The Project · Overview</p>
     <h1 class="hero-title">Building a <em>Centralized</em><br>Workflow System</h1>
-    <p class="hero-subtitle">Designed and deployed an end-to-end materials workflow system — transforming scattered manual operations into a centralized, auditable process that established financial accountability and enabled data-driven planning.</p>
+    <p class="hero-subtitle">Designed and deployed an end-to-end materials workflow system — <i>transforming scattered manual operations into a centralized, auditable process</i> that established financial accountability and enabled data-driven planning.</p>
   </div>
   
   <div class="hero-right">
@@ -558,7 +563,7 @@
       <span class="section-number">01</span>
       <h2 class="section-title">Business <em>Challenges</em></h2>
     </div>
-    <p class="challenges-lead reveal">As the organization scaled across branches, operations remained dependent on fragmented, manual workflows. <br>Without system-level visibility, failures accumulated silently — undetected, unassigned, and unresolved until they surfaced as larger problems.</p>
+    <p class="challenges-lead reveal">As the organization scaled across branches, <en>operations remained dependent on fragmented, manual workflows</en>. <br>Without system-level visibility, <en>failures accumulated silently</en> — undetected, unassigned, and unresolved until they surfaced as larger problems.</p>
     <div class="challenge-grid reveal">
         
       <div class="challenge-card">
@@ -601,8 +606,8 @@
     </div>
     <div class="role-intro-block reveal">
       <div class="role-intro-text">
-        <p>Sole Owner — End-to-End Process Design & Implementation<br>
-            Independently deployed a custom solution to eliminate operational bottlenecks across multiple branches without requiring dedicated engineering resources.</p>
+        <p><en>Sole Owner</en> — End-to-End Process Design & Implementation<br>
+            Independently deployed a custom solution to <en>eliminate operational bottlenecks across multiple branches</en> without requiring dedicated engineering resources.</p>
       </div>
     </div>
     <div class="resp-grid">
@@ -641,8 +646,8 @@
       <span class="section-number">03</span>
       <h2 class="section-title">Solution <em>Approach</em></h2>
     </div>
-    <p class="system-lead reveal">No new tools. No additional budget. No steep learning curve.<br>
-    The solution was designed around constraints — and Google Workspace, already embedded in daily operations, was the right foundation to build on.</p>
+    <p class="system-lead reveal"><en>No new tools. No additional budget. No steep learning curve.</en><br>
+    The solution was designed around constraints — and Google Workspace, already embedded in daily operations, was <en>the right foundation to build on.</en></p>
 
     <div class="arch-diagram-wrap reveal">
 
@@ -690,7 +695,7 @@
       <h2 class="section-title">The <em>Workflow</em></h2>
     </div>
     <p class="system-lead reveal">
-    Built on existing infrastructure, the workflow connects every stage of the materials process into a single traceable system, <br> from the moment a request is submitted to the point Finance reconciles the invoice.
+    Built on existing infrastructure, the workflow <en>connects every stage of the materials process</en> into <en>a single traceable system</en>, <br> from the moment a request is submitted to the point Finance reconciles the invoice.
     </p>
 
     <div class="sys-slider reveal">
@@ -785,14 +790,13 @@
       <span class="section-number">05</span>
       <h2 class="section-title">Business Value <em>Delivered</em></h2>
     </div>
-    <p class="results-lead reveal">The system replaced four informal workarounds with auditable, process-level controls — each outcome mapped directly to a structural gap that had no resolution path before.</p>
+    <p class="results-lead reveal">The system replaced four informal workarounds with <en>auditable, process-level controls</en> — each outcome mapped directly to a structural gap <en>that had no resolution path before</en>.</p>
     <div class="results-grid">
       <div class="result-card op reveal">
         <p class="result-cat">✔ Content Accountability</p>
         <h3 class="result-title">Commitments Tracked. Gaps Closed.</h3>
         <p class="result-body">
-            <b>• Content Oversight</b> – Materials are logged and traceable, making curriculum alignment auditable on demand rather than assumed.<br>
-            <b>• Delivery Accountability</b> – Every submission is timestamped and assigned, creating a clear record of who committed to what — and when.
+            Materials are logged and traceable against curriculum requirements, making alignment auditable on demand. Every submission carries a timestamp and assignee — creating the organization's first verifiable record of content commitments.
         </p>
       </div>
       
@@ -800,8 +804,7 @@
         <p class="result-cat">✔ Operational Reliability</p>
         <h3 class="result-title">Reliability Built Into the Process</h3>
         <p class="result-body">
-            <b>• Intake Control</b> – A centralized intake channel replaced fragmented request paths, eliminating missed or delayed fulfillment.<br>
-            <b>• Resource Optimization</b> – Standardized workflows reduced reactive coordination load, freeing TAs for higher-value student support.
+            A centralized intake channel replaced fragmented request paths, eliminating the conditions for missed fulfillment. Standardized workflows reduced reactive coordination load, freeing teaching assistants for higher-value student support.
         </p>
       </div>
       
@@ -809,8 +812,7 @@
         <p class="result-cat">✔ Financial Control</p>
         <h3 class="result-title">From Blind Payment to Verified Spend</h3>
         <p class="result-body">
-            <b>• Cost Visibility</b> – Request records provided a reconciliation baseline, enabling Finance to verify invoices before payment rather than after.<br>
-            <b>• Leakage Prevention</b> – Documented evidence closed the gap for unchecked billing — blind payments became structurally impossible.
+            Request records established a reconciliation baseline Finance had never had — invoices are now verified against evidence before payment. Documented approval trails made unchecked billing structurally impossible.
         </p>
       </div>
       
@@ -818,8 +820,7 @@
         <p class="result-cat">✔ Planning Intelligence</p>
         <h3 class="result-title">Data Where There Was None</h3>
         <p class="result-body">
-            <b>• Consumption Tracking</b> –  Visible demand patterns provide a baseline for budget planning and vendor negotiations.<br>
-            <b>• Data Maturity</b> – The organization moved from zero operational data to a structured, analytics-ready foundation.
+            Captured demand patterns across branches provide the first reliable baseline for budget planning and vendor negotiations — moving the organization from zero operational data to an analytics-ready foundation.
         </p>
       </div>
       
